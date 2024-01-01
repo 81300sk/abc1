@@ -1,2 +1,2 @@
-# abc1
-this is second line for test for pull
+# mydb1
+user name for login is root and password is redhat inside the container of mariadb.
