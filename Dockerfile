@@ -1,27 +1,21 @@
 FROM centos:7
 
-MAINTAINER Maninder Singh Bhui  "maninderbhui@gmail.com"
+RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
-ADD mariadb.repo /etc/yum.repos.d/mariadb.repo
+RUN yum install -y  https://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
-ADD mariadb.sql /root/mariadb.sql
+RUN yum install -y --enablerepo=remi-php80 php php-cli
 
-ADD server.cnf /etc/my.cnf.d/server.cnf
+RUN yum install -y --enablerepo=remi-php80 php-mysqlnd
 
-ADD mariadb.sh /root/mariadb.sh
+RUN yum install unzip -y
 
-RUN yum install epel-release -y
+WORKDIR /var/www/html
 
-RUN yum install mariadb-server -y
+COPY ./index.html /var/www/html
 
-RUN yum clean all
 
-COPY ./  /opt
+EXPOSE 80 443
 
-COPY Dockerfile /root
+ENTRYPOINT ["/usr/sbin/httpd","-D","FOREGROUND"]
 
-RUN chmod +x /root/mariadb.sh
-
-EXPOSE 3306
-
-CMD ["/root/mariadb.sh"]
